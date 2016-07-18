@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CallInformer</string>
+    <string name="widget_title">Incoming calling from &lt;b>%1$s&lt;/b></string>
+    <string name="open_browser">Open in browser</string>
+    <string name="loading_data">We are looking for information about this number</string>
+    <string name="loading_error">Loading error! Try again later.</string>
+    <string name="try_again">Try again</string>
+    <string name="no_results">We have not found any information about this number</string>
+    <string name="enable_widget">Enable widget</string>
+    <string name="description">Call Informer provides you information about number that call you. Widget will be open when you will get incoming call.</string>
+</resources>
