@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,18 +16,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ru.yandex.yamblz.callinformer.R;
 import ru.yandex.yamblz.callinformer.model.SearchResult;
-import ru.yandex.yamblz.callinformer.util.GoogleSearchJSONDeserializer;
+import ru.yandex.yamblz.callinformer.task.ResultsHandlerTask;
 import ru.yandex.yamblz.callinformer.util.StringUtils;
 import ru.yandex.yamblz.callinformer.util.animation.AnimationUtils;
 import ru.yandex.yamblz.callinformer.util.loader.GoogleSearchContentLoader;
@@ -150,26 +142,11 @@ public class CallingWidget {
     private void loadData() {
 
         new GoogleSearchContentLoader.Builder(context, phone).onResponse((response) -> showData(response))
-                .onError((error) -> {
-                    Log.d("callingtest", error.getLocalizedMessage());
-                    showLoadingError();
-                }).build().load();
+                .onError((error) -> showLoadingError()).build().load();
     }
 
     private void showData(String response) {
-
-        List<SearchResult> results = new GsonBuilder()
-                .registerTypeAdapter(new TypeToken<ArrayList<SearchResult>>() {
-                }.getType(), new GoogleSearchJSONDeserializer())
-                .create().fromJson(response, new TypeToken<ArrayList<SearchResult>>() {
-        }.getType());
-
-        if(results.isEmpty()) {
-            showNoResults();
-        } else {
-            showResult(results.get(0));
-        }
-
+        new ResultsHandlerTask(this::showResult, this::showNoResults).execute(response);
     }
 
     private void showResult(SearchResult searchResult) {
