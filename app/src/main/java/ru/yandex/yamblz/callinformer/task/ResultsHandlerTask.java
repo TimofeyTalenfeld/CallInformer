@@ -2,6 +2,7 @@ package ru.yandex.yamblz.callinformer.task;
 
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -29,13 +30,14 @@ public class ResultsHandlerTask extends AsyncTask<String, Void, SearchResult> {
 
     @Override
     protected SearchResult doInBackground(String... strings) {
+
         List<SearchResult> results = new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<ArrayList<SearchResult>>() {
                 }.getType(), new GoogleSearchJSONDeserializer())
                 .create().fromJson(strings[0], new TypeToken<ArrayList<SearchResult>>() {
                 }.getType());
 
-        return results.isEmpty() ? null : results.get(0);
+        return (results == null) || results.isEmpty() ? null : results.get(0);
     }
 
     @Override

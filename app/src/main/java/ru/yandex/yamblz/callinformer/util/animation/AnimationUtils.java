@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
  */
 public class AnimationUtils {
 
-    public static final void makeAnimation(View view, Animation animation, int duration, final Runnable onStartFunction, final Runnable onEndFunction) {
+    public static final void makeAnimation(View view, Animation animation, final Runnable onStartFunction, int duration, final Runnable ... onEndFunctions) {
         animation.setDuration(duration);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -31,7 +31,7 @@ public class AnimationUtils {
                 animation.setDuration(1);
                 view.startAnimation(animation);
 
-                if(onEndFunction != null) {
+                for(Runnable onEndFunction: onEndFunctions) {
                     onEndFunction.run();
                 }
             }

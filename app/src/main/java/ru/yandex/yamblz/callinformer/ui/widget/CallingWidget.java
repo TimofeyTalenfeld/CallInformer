@@ -113,7 +113,7 @@ public class CallingWidget {
             return;
         }
         AnimationUtils.makeAnimation(contentLayout, new TranslateAnimation(contentLayout.getX(),
-                -contentLayout.getX(), 0, 0), 500, this::startAnimation, this::resetView);
+                -contentLayout.getX(), 0, 0), this::startAnimation, 500, this::resetView, this::endAnimation);
     }
 
     public void show(String phone) {
@@ -128,7 +128,7 @@ public class CallingWidget {
         loadData();
         windowManager.addView(widgetLayout, params);
 
-        AnimationUtils.makeAnimation(contentLayout, new AlphaAnimation(0, 1), 500, this::startAnimation, this::endAnimation);
+        AnimationUtils.makeAnimation(contentLayout, new AlphaAnimation(0, 1), this::startAnimation, 500, this::endAnimation);
 
         isVisible = true;
 
@@ -136,7 +136,6 @@ public class CallingWidget {
 
     private void resetView() {
         contentLayout.setX(0);
-        endAnimation();
     }
 
     private void loadData() {
@@ -186,14 +185,13 @@ public class CallingWidget {
         if(isVisible) {
             isVisible = false;
             AnimationUtils.makeAnimation(contentLayout, new TranslateAnimation(contentLayout.getX(),
-                    contentLayout.getX() > 0 ? 1000 : -1000, 0, 0), 500, this::startAnimation,
-                    this::removeFromManager);
+                    contentLayout.getX() > 0 ? 1000 : -1000, 0, 0), this::startAnimation, 500,
+                    this::removeFromManager, this::endAnimation);
         }
     }
 
     private void removeFromManager() {
         windowManager.removeView(widgetLayout);
-        endAnimation();
     }
 
     private void fillViews() {
